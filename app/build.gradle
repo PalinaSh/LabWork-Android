@@ -9,6 +9,7 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
+
     signingConfigs {
         release {
             storeFile file(keystoreProperties['storeFile'])
@@ -40,7 +41,7 @@ android {
                 standardOutput = stdout
             }
             def describeTags = stdout.toString().trim().split("-")
-            return describeTags[0] + "." + describeTags[1]
+            return describeTags[0] + "." + ((describeTags[1] as int) + 1).toString()
         }
         catch (ignored) {
             return null
@@ -57,10 +58,28 @@ android {
         setProperty("archivesBaseName", "$applicationId-$versionName")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    flavorDimensions "version"
+    productFlavors {
+        dev {
+            // Assigns this product flavor to the "version" flavor dimension.
+            // This property is optional if you are using only one dimension.
+            dimension "version"
+            versionNameSuffix "-dev"
+            manifestPlaceholders.screenOrientation = "unspecified"
+            signingConfig signingConfigs.release
+        }
+        full {
+            dimension "version"
+            manifestPlaceholders.screenOrientation = "portrait"
             signingConfig signingConfigs.release
         }
     }

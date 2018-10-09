@@ -2,6 +2,7 @@
     <string name="app_name">lr1</string>
     <string name="permissionText">The app needs a permission to access your phone functions, because the app has to show you your device IMEI</string>
     <string name="permissionTitle">Explanation</string>
+    <string name="noPermission">No permission</string>
     <string name="version">Version: </string>
     <string name="IMEI">Device IMEI: </string>
 </resources>

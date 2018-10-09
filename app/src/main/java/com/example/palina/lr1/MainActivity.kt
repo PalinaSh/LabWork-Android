@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         else {
-            showIMEI()
+            printIMEI()
         }
     }
 
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
             PERMISSIONS_REQUEST_READ_PHONE_STATE -> {
                 // If request is cancelled, the result arrays are empty.
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    showIMEI()
+                    printIMEI()
                 } else {
                     imeiTextView?.text = resources.getString(R.string.noPermission)
                 }
@@ -72,12 +72,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showIMEI(){
+    private fun printIMEI(){
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
                 !=PackageManager.PERMISSION_GRANTED)
             return
         val tel = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         val imei = tel.deviceId
-        imeiTextView?.text = imei
+        imeiTextView?.text = imei.toString()
     }
 }

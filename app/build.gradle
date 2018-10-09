@@ -36,10 +36,11 @@ android {
         try {
             def stdout = new ByteArrayOutputStream()
             exec {
-                commandLine 'git', 'describe', '--tags', '--dirty'
+                commandLine 'git', 'describe', '--tags'
                 standardOutput = stdout
             }
-            return stdout.toString().trim()
+            def describeTags = stdout.toString().trim().split("-")
+            return describeTags[0] + "." + describeTags[1]
         }
         catch (ignored) {
             return null

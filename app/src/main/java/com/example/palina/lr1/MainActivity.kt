@@ -38,21 +38,23 @@ class MainActivity : AppCompatActivity() {
                 dialog.setTitle(resources.getString(R.string.permissionTitle))
                 dialog.setCancelable(false)
                 dialog.setPositiveButton("OK") { dialogInterface, which ->
-                    ActivityCompat.requestPermissions(this,
-                            arrayOf(Manifest.permission.READ_PHONE_STATE),
-                            PERMISSIONS_REQUEST_READ_PHONE_STATE)
+                    requestPermission()
                 }
                 dialog.show()
             }
             else {
-                ActivityCompat.requestPermissions(this,
-                        arrayOf(Manifest.permission.READ_PHONE_STATE),
-                        PERMISSIONS_REQUEST_READ_PHONE_STATE)
+                requestPermission()
             }
         }
         else {
             printIMEI()
         }
+    }
+
+    private fun requestPermission(){
+        ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.READ_PHONE_STATE),
+                PERMISSIONS_REQUEST_READ_PHONE_STATE)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
@@ -67,8 +69,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 return
             }
-
-
         }
     }
 

@@ -5,4 +5,7 @@
     <string name="noPermission">No permission</string>
     <string name="version">Version: </string>
     <string name="IMEI">Device IMEI: </string>
+    <string name="text_favorites">Favorite</string>
+    <string name="text_schedules">Schedule</string>
+    <string name="text_music">Music</string>
 </resources>

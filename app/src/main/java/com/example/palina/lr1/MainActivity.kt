@@ -1,18 +1,18 @@
 package com.example.palina.lr1
 
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.support.v4.app.ActivityCompat
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AlertDialog
 import android.telephony.TelephonyManager
 import android.widget.TextView
 
-
 class MainActivity : AppCompatActivity() {
+
     private val PERMISSIONS_REQUEST_READ_PHONE_STATE: Int = 1
     private var imeiTextView: TextView? = null
 
@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun printIMEI(){
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
-                !=PackageManager.PERMISSION_GRANTED)
+                != PackageManager.PERMISSION_GRANTED)
             return
         val tel = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         val imei = tel.deviceId

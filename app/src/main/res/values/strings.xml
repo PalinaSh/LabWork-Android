@@ -1,11 +1,13 @@
 <resources>
-    <string name="app_name">lr1</string>
+    <string name="app_name">AndroidLabs</string>
     <string name="permissionText">The app needs a permission to access your phone functions, because the app has to show you your device IMEI</string>
     <string name="permissionTitle">Explanation</string>
     <string name="noPermission">No permission</string>
     <string name="version">Version: </string>
     <string name="IMEI">Device IMEI: </string>
-    <string name="text_favorites">Favorite</string>
-    <string name="text_schedules">Schedule</string>
-    <string name="text_music">Music</string>
+    <string name="text_profile">Profile</string>
+    <string name="text_empty">Empty</string>
+    <string name="description_telephone">Phone</string>
+    <string name="description_email">Email</string>
+    <string name="description_photo">Photo</string>
 </resources>

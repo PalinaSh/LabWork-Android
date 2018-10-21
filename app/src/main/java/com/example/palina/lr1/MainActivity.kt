@@ -9,7 +9,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AlertDialog
 import android.telephony.TelephonyManager
+import android.view.View
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,12 +25,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val versionTextView: TextView = findViewById(R.id.versionTextView)
-        versionTextView.text = BuildConfig.VERSION_NAME
+        val fab: FloatingActionButton? = findViewById(R.id.photo_camera)
+        //val versionTextView: TextView = findViewById(R.id.versionTextView)
+        //versionTextView.text = BuildConfig.VERSION_NAME
 
-        imeiTextView = findViewById(R.id.imeiTextView)
+        //imeiTextView = findViewById(R.id.imeiTextView)
 
-        getDeviceIMEI()
+        //getDeviceIMEI()
     }
 
     private fun getDeviceIMEI(){

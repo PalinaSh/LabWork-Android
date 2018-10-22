@@ -9,11 +9,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AlertDialog
 import android.telephony.TelephonyManager
+import android.text.Layout
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import java.util.function.BinaryOperator
 
 
 class MainActivity : AppCompatActivity() {
@@ -85,5 +88,44 @@ class MainActivity : AppCompatActivity() {
         val tel = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         val imei = tel.deviceId
         imeiTextView?.text = imei.toString()
+    }
+
+    fun editProfile(view: View){
+        val editLayout: View = findViewById(R.id.includeLayoutEdit)
+        editLayout.visibility = View.VISIBLE
+        val profileLayout: View = findViewById(R.id.includeLayoutProfile)
+        profileLayout.visibility = View.GONE
+    }
+
+    fun newProfile(view: View){
+        val updateName: EditText = findViewById(R.id.nameEdit)
+        val updateSurname: EditText = findViewById(R.id.surnameEdit)
+        val updatePhone: EditText = findViewById(R.id.phoneEdit)
+        val updateEmail: EditText = findViewById(R.id.emailEdit)
+
+        if (validateRequired(updateName) and validateRequired(updateSurname))
+            return
+
+        val nameTextView: TextView = findViewById(R.id.name)
+        nameTextView.text = updateName.text
+        val surnameTextView: TextView = findViewById(R.id.surname)
+        surnameTextView.text = updateSurname.text
+        val phoneTextView: TextView = findViewById(R.id.phoneNumber)
+        phoneTextView.text = updatePhone.text
+        val emailTextView: TextView = findViewById(R.id.email)
+        emailTextView.text = updateEmail.text
+
+        val editLayout: View = findViewById(R.id.includeLayoutEdit)
+        editLayout.visibility = View.GONE
+        val profileLayout: View = findViewById(R.id.includeLayoutProfile)
+        profileLayout.visibility = View.VISIBLE
+    }
+
+    private fun validateRequired(field: EditText): Boolean {
+        if (field.text.toString() == "") {
+            field.error = "This field is required"
+            return false
+        }
+        return true
     }
 }

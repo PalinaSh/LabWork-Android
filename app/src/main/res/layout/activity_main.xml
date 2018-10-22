@@ -34,20 +34,18 @@
                     app:layout_collapseParallaxMultiplier="0.7"
                     android:contentDescription="@string/description_photo"/>
 
-            <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:minHeight="?android:attr/actionBarSize"
-                    app:layout_collapseMode="pin"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                    app:popupTheme="@style/AppTheme.PopupOverlay"/>
-
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/profile_content" />
+    <include
+            android:id="@+id/includeLayoutProfile"
+            layout="@layout/profile_content"
+            android:visibility="visible"/>
+    <include
+            android:id="@+id/includeLayoutEdit"
+            layout="@layout/edit_profile"
+            android:visibility="gone"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/photo_camera"

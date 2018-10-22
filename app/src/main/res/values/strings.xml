@@ -10,4 +10,10 @@
     <string name="description_telephone">Phone</string>
     <string name="description_email">Email</string>
     <string name="description_photo">Photo</string>
+    <string name="text_view_name">Name</string>
+    <string name="text_view_surname">Surname</string>
+    <string name="text_view_phone">Your phone</string>
+    <string name="text_view_email">Your email</string>
+    <string name="button_edit">Edit</string>
+    <string name="button_ok">OK</string>
 </resources>

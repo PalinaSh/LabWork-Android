@@ -16,4 +16,5 @@
     <string name="text_view_email">Your email</string>
     <string name="button_edit">Edit</string>
     <string name="button_ok">OK</string>
+    <string name="about">About</string>
 </resources>

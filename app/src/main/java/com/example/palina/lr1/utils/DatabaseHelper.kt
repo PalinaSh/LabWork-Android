@@ -1,4 +1,4 @@
-package com.example.palina.lr1
+package com.example.palina.lr1.utils
 
 import android.content.ContentValues
 import android.content.Context

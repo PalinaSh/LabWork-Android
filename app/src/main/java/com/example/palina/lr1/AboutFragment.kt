@@ -13,11 +13,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import com.example.palina.lr1.utils.Constants
 
 class AboutFragment : Fragment() {
 
     private var imeiTextView: TextView? = null
-    private val PERMISSIONS_REQUEST_READ_PHONE_STATE: Int = 1
+    private val PERMISSIONS_REQUEST_READ_PHONE_STATE: Int = Constants.PERMISSIONS_REQUEST_READ_PHONE_STATE
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

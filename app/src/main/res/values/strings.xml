@@ -3,6 +3,7 @@
     <string name="permissionText">The app needs a permission to access your phone functions, because the app has to show
         you your device IMEI
     </string>
+    <string name="permissionTextCamera">The app needs a permission to make a photo</string>
     <string name="permissionTitle">Explanation</string>
     <string name="noPermission">No permission</string>
     <string name="version">Version:</string>

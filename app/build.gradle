@@ -101,4 +101,10 @@ dependencies {
     def nav_version = "1.0.0-alpha07"
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
     implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
+
+    implementation 'com.google.firebase:firebase-core:16.0.5'
+    implementation 'com.google.firebase:firebase-database:16.0.5'
+    implementation 'com.google.firebase:firebase-auth:16.0.5'
 }
+
+apply plugin: 'com.google.gms.google-services'

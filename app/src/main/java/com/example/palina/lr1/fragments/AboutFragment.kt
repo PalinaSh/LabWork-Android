@@ -1,4 +1,4 @@
-package com.example.palina.lr1
+package com.example.palina.lr1.fragments
 
 
 import android.Manifest
@@ -13,6 +13,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import com.example.palina.lr1.BuildConfig
+import com.example.palina.lr1.R
 import com.example.palina.lr1.utils.Constants
 
 class AboutFragment : Fragment() {
@@ -49,7 +51,7 @@ class AboutFragment : Fragment() {
                 dialog.setMessage(resources.getString(R.string.permissionText))
                 dialog.setTitle(resources.getString(R.string.permissionTitle))
                 dialog.setCancelable(false)
-                dialog.setPositiveButton("OK") { dialogInterface, which ->
+                dialog.setPositiveButton("OK") { _, _ ->
                     this.requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE),
                         PERMISSIONS_REQUEST_READ_PHONE_STATE)
                 }

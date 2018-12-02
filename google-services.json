@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "193153263386",
+    "firebase_url": "https://labwork-android-ae588.firebaseio.com",
+    "project_id": "labwork-android-ae588",
+    "storage_bucket": "labwork-android-ae588.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193153263386:android:81c1c360224f592b",
+        "android_client_info": {
+          "package_name": "com.example.palina.androidlabs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "193153263386-fd3ftvojecdghomr3j2fun8k1gr61c3e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.palina.androidlabs",
+            "certificate_hash": "ade6d8b1e4cf512b76af7411002f3b9dd970e1c3"
+          }
+        },
+        {
+          "client_id": "193153263386-9cabet6ubsrd9m8r9et0rn2te2oj9thv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBliPKHKbi2uJ1fwH0m3UO6Db1M8jx9cYI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "193153263386-9cabet6ubsrd9m8r9et0rn2te2oj9thv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

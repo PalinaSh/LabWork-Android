@@ -1,11 +1,16 @@
-package com.example.palina.lr1
+package com.example.palina.lr1.fragments
 
 import android.Manifest
+import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.opengl.Visibility
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.SpannableStringBuilder
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,24 +19,23 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
+import com.example.palina.lr1.R
+import com.example.palina.lr1.models.User
+import com.example.palina.lr1.utils.AsyncLoader
 import com.example.palina.lr1.utils.Constants
+import com.example.palina.lr1.utils.DatabaseHelper
+import com.example.palina.lr1.validation.EmailValidation
+import com.example.palina.lr1.validation.PhoneValidation
+import com.example.palina.lr1.validation.TextFieldValidation
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_login.*
 
 class HomeFragment : Fragment() {
 
-    private var nameTextView: TextView? = null
-    private var nameEditText: EditText? = null
-    private var surnameTextView: TextView? = null
-    private var surnameEditText: EditText? = null
-    private var phoneTextView: TextView? = null
-    private var phoneEditText: EditText? = null
-    private var emailTextView: TextView? = null
-    private var emailEditText: EditText? = null
-
-    private var updateName: EditText? = null
-    private var updateSurname: EditText? = null
-    private var updatePhone: EditText? = null
-    private var updateEmail: EditText? = null
+    val db = DatabaseHelper.dataBase
 
     private val PERMISSIONS_REQUEST_CAMERA = Constants.PERMISSIONS_REQUEST_CAMERA
     private val CAMERA_REQUEST_CODE = Constants.CAMERA_REQUEST_CODE
@@ -41,83 +45,111 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        if (!db.isAuthUser()) {
+            findNavController().navigate(R.id.loginFragment)
+            return null
+        }
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        nameTextView = view.findViewById(R.id.name)
-        nameEditText = view.findViewById(R.id.nameEdit)
-        surnameTextView = view.findViewById(R.id.surname)
-        surnameEditText = view.findViewById(R.id.surnameEdit)
-        phoneTextView = view.findViewById(R.id.phoneNumber)
-        phoneEditText = view.findViewById(R.id.phoneEdit)
-        emailTextView = view.findViewById(R.id.email)
-        emailEditText = view.findViewById(R.id.emailEdit)
-
-        updateName = view.findViewById(R.id.nameEdit)
-        updateSurname = view.findViewById(R.id.surnameEdit)
-        updatePhone = view.findViewById(R.id.phoneEdit)
-        updateEmail = view.findViewById(R.id.emailEdit)
-
-        val photoCamera : FloatingActionButton = view.findViewById(R.id.photo_camera)
-        photoCamera.setOnClickListener{
+        photo_camera.setOnClickListener{
             showDialog()
         }
 
-        val viewSwitcher : ViewSwitcher = view.findViewById(R.id.profile_switcher)
-
-        val buttonEdit : Button = view.findViewById(R.id.edit_button)
-        buttonEdit.setOnClickListener{
-            viewSwitcher.showNext()
+        edit_button.setOnClickListener{
+            profile_switcher.showNext()
         }
 
-        val buttonOk : Button = view.findViewById(R.id.ok_button)
-        buttonOk.setOnClickListener{
+        ok_button.setOnClickListener{
+            changeData()
+        }
+
+        val progressDialog = ProgressDialog(context)
+        progressDialog.setMessage("Get data...")
+        progressDialog.setCancelable(false)
+        AsyncLoader(object : AsyncLoader.LoadListener
+        {
+            override fun onPreExecute() {
+                db.getCurrentUser()
+                progressDialog.show()
+            }
+
+            override fun onPostExecute() {
+                progressDialog.dismiss()
+                if (db.getCurrentUser() == null) {
+                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                    return
+                }
+                getData()
+                setData()
+            }
+
+            override fun doInBackground() {
+                while (true) {
+                    if (db.getCurrentUser() != null)
+                        break
+                }
+            }
+        }).execute()
+    }
+
+    private fun getData() {
+        val user = db.getCurrentUser()
+        name.text = user?.name
+        surname.text = user?.surname
+        phoneNumber.text = user?.phone
+        email.text = user?.email
+    }
+
+    private fun setData(){
+        val user = db.getCurrentUser()
+        nameEdit.text = SpannableStringBuilder(user?.name)
+        surnameEdit.text = SpannableStringBuilder(user?.surname)
+        emailEdit.text = SpannableStringBuilder(user?.email)
+        phoneEdit.text = SpannableStringBuilder(user?.phone)
+    }
+
+    private fun changeData(destroy : Boolean = false) {
+        if (db.getCurrentUser() == null)
+            return
+        if (!compareUserData(changeUserData(), db.getCurrentUser())) {
             val dialog = AlertDialog.Builder(activity!!)
             dialog.setMessage("Save your changes?")
-            dialog.setPositiveButton("Yes"){ dialogInterface, which ->
-                //db
-                viewSwitcher.showNext()
+            dialog.setPositiveButton("Yes") { _, _ ->
+                db.changeUser(changeUserData())
+                if (!destroy) {
+                    profile_switcher.showNext()
+                    getData()
+                    setData()
+                }
             }
-            dialog.setNegativeButton("No"){dialogInterface, which ->
-                viewSwitcher.showNext()
+            dialog.setNegativeButton("No") { _, _ ->
+                if (!destroy)
+                    profile_switcher?.showNext()
             }
             dialog.show()
         }
+        else
+            if (!destroy)
+                profile_switcher?.showNext()
     }
 
-    fun newProfile(view: View){
-        if (!(validateRequired(updateName!!) and validateRequired(updateSurname!!)))
-            return
-
-        val name = updateName?.text.toString()
-        val surname = updateSurname?.text.toString()
-        val phone = updatePhone?.text.toString()
-        val email = updateEmail?.text.toString()
-        setData(name, surname, phone, email)
-
-        //db?.updateUser(name, surname, phone, email)
+    private fun changeUserData() : User {
+        return User(nameEdit.text.toString().trim(),
+                    surnameEdit.text.toString().trim(),
+                    emailEdit.text.toString().trim(),
+                    "????",
+                    phoneEdit.text.toString().trim())
     }
 
-    private fun validateRequired(field: EditText): Boolean {
-        if (field.text.toString() == "") {
-            field.error = "This field is required"
-            return false
-        }
-        return true
-    }
-
-    private fun setData(name: String?, surname:String?, phone: String?, email: String?) {
-        nameTextView?.text = name
-        nameEditText?.setText(name)
-        surnameTextView?.text = surname
-        surnameEditText?.setText(surname)
-        phoneTextView?.text = phone
-        phoneEditText?.setText(phone)
-        emailTextView?.text = email
-        emailEditText?.setText(email)
+    private fun compareUserData(newUser: User, currentUser: User?) : Boolean {
+        if ((newUser.name == currentUser?.name) and (newUser.surname == currentUser?.surname) and
+            (newUser.phone == currentUser?.phone) and (newUser.email == currentUser?.email))
+            return true
+        return false
     }
 
     private fun showDialog(){
@@ -125,7 +157,7 @@ class HomeFragment : Fragment() {
         val builder = AlertDialog.Builder(activity!!)
         builder.setTitle("Photo")
 
-        builder.setItems(photoMods) { element, which ->
+        builder.setItems(photoMods) { _, which ->
             when (photoMods[which]) {
                 "Create photo" -> {
                     if (ContextCompat.checkSelfPermission(activity!!.applicationContext, Manifest.permission.CAMERA)
@@ -181,7 +213,7 @@ class HomeFragment : Fragment() {
             val dialog = AlertDialog.Builder(activity!!)
             dialog.setMessage(permissiomText)
             dialog.setTitle(permissionTitle)
-            dialog.setPositiveButton("OK") { dialogInterface, which ->
+            dialog.setPositiveButton("OK") { _, _ ->
                 requestPermission(permission, permissionCode)
             }
             dialog.show()
@@ -204,5 +236,10 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        changeData(true)
+        super.onDestroyView()
     }
 }

@@ -24,10 +24,12 @@ class DeepLinksHelper {
             catch (e : NullPointerException) {}
 
             when (pageNumber){
-                0 -> navController.navigate(R.id.homeFragment)
-                1 -> navController.navigate(R.id.emptyFragment)
-                2 -> navController.navigate(R.id.empty1Fragment)
-                3 -> navController.navigate(R.id.aboutFragment)
+                0 -> navController.navigate(R.id.loginFragment)
+                1 -> navController.navigate(R.id.registerFragment)
+                2 -> navController.navigate(R.id.homeFragment)
+                3 -> navController.navigate(R.id.emptyFragment)
+                4 -> navController.navigate(R.id.empty1Fragment)
+                5 -> navController.navigate(R.id.aboutFragment)
             }
         }
     }

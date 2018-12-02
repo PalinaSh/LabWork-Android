@@ -6,17 +6,23 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.ui.setupWithNavController
+import com.example.palina.lr1.utils.DatabaseHelper
 import com.example.palina.lr1.utils.DeepLinksHelper
 
 
 class MainActivity : AppCompatActivity() {
+
+    val db = DatabaseHelper.dataBase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +36,18 @@ class MainActivity : AppCompatActivity() {
         setupBottomNavMenu(navController)
 
         navController.addOnNavigatedListener { _, destination ->
+            when (destination.id){
+                R.id.loginFragment -> {
+                    db.signOut()
+                    hideBottomNavigation(findViewById(R.id.bottom_navigation))
+                }
+                R.id.registerFragment -> hideBottomNavigation(findViewById(R.id.bottom_navigation))
+                R.id.homeFragment -> showBottomNavigation(findViewById(R.id.bottom_navigation))
+                //R.id.aboutFragment -> showBottomNavigation(findViewById(R.id.bottom_navigation))
+                //R.id.emptyFragment -> showBottomNavigation(findViewById(R.id.bottom_navigation))
+                //R.id.empty1Fragment -> showBottomNavigation(findViewById(R.id.bottom_navigation))
+            }
+
             val dest: String = try {
                 resources.getResourceName(destination.id)
             } catch (e: Resources.NotFoundException) {
@@ -40,9 +58,23 @@ class MainActivity : AppCompatActivity() {
             Log.d("NavigationActivity", "Navigated to $dest")
         }
 
-        DeepLinksHelper.uriNavigate(navController, this)
+        //DeepLinksHelper.uriNavigate(navController, this)
     }
 
+    private fun hideBottomNavigation(bottom_navigation: BottomNavigationView) {
+        with(bottom_navigation) {
+            if (visibility == View.VISIBLE && alpha == 1f) {
+                animate().alpha(0f).withEndAction { visibility = View.GONE }
+            }
+        }
+    }
+
+    private fun showBottomNavigation(bottom_navigation: BottomNavigationView) {
+        with(bottom_navigation) {
+            visibility = View.VISIBLE
+            animate().alpha(1f)
+        }
+    }
 
     private fun setupBottomNavMenu(navController: NavController) {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)

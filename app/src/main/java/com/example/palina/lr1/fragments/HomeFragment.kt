@@ -5,11 +5,8 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.opengl.Visibility
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.provider.MediaStore
-import android.text.Editable
 import android.text.SpannableStringBuilder
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -25,13 +22,7 @@ import com.example.palina.lr1.models.User
 import com.example.palina.lr1.utils.AsyncLoader
 import com.example.palina.lr1.utils.Constants
 import com.example.palina.lr1.utils.DatabaseHelper
-import com.example.palina.lr1.validation.EmailValidation
-import com.example.palina.lr1.validation.PhoneValidation
-import com.example.palina.lr1.validation.TextFieldValidation
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_login.*
 
 class HomeFragment : Fragment() {
 
@@ -74,22 +65,24 @@ class HomeFragment : Fragment() {
         {
             override fun onPreExecute() {
                 db.getCurrentUser()
+                db.getPhoto()
                 progressDialog.show()
             }
 
             override fun onPostExecute() {
                 progressDialog.dismiss()
                 if (db.getCurrentUser() == null) {
-                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Fail loading", Toast.LENGTH_SHORT).show()
                     return
                 }
                 getData()
+                downloadPhoto()
                 setData()
             }
 
             override fun doInBackground() {
                 while (true) {
-                    if (db.getCurrentUser() != null)
+                    if ((db.getCurrentUser() != null) and (db.getCurrentAvatar() != null))
                         break
                 }
             }
@@ -102,6 +95,14 @@ class HomeFragment : Fragment() {
         surname.text = user?.surname
         phoneNumber.text = user?.phone
         email.text = user?.email
+    }
+
+    private fun downloadPhoto(){
+        val downloadPhoto = db.getCurrentAvatar()
+        if (downloadPhoto == null)
+            avatar.setImageResource(R.drawable.avatar)
+        else
+            avatar.setImageBitmap(downloadPhoto)
     }
 
     private fun setData(){
@@ -195,6 +196,7 @@ class HomeFragment : Fragment() {
             CAMERA_REQUEST_CODE -> {
                 if (data != null){
                     avatar?.setImageBitmap(data.extras!!.get("data") as Bitmap)
+                    db.setPhoto(data.extras!!.get("data") as Bitmap)
                 }
             }
             GALLERY_REQUEST_CODE -> {
@@ -202,6 +204,7 @@ class HomeFragment : Fragment() {
                     val contentURI = data.data
                     val bitmap = MediaStore.Images.Media.getBitmap(activity!!.contentResolver, contentURI)
                     avatar?.setImageBitmap(bitmap)
+                    db.setPhoto(bitmap)
                 }
             }
         }

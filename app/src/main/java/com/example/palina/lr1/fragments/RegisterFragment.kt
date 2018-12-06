@@ -2,6 +2,7 @@ package com.example.palina.lr1.fragments
 
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.example.palina.lr1.MainActivity
 import com.example.palina.lr1.R
 import com.example.palina.lr1.models.User
 import com.example.palina.lr1.utils.AsyncLoader
@@ -64,7 +66,8 @@ class RegisterFragment : Fragment() {
                     override fun onPostExecute() {
                         progressDialog.dismiss()
                         if (db.isSignUp == true) {
-                            findNavController().navigate(R.id.homeFragment)
+                            activity!!.finish()
+                            startActivity(Intent(context, MainActivity::class.java))
                             return
                         }
                         else

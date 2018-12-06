@@ -13,7 +13,7 @@
         android:title="@string/text_empty"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/loginFragment"
+        android:id="@+id/empty1Fragment"
         android:enabled="true"
         android:title="@string/text_logout"
         app:showAsAction="ifRoom"/>

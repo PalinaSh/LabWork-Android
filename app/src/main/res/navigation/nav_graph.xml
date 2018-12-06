@@ -12,9 +12,5 @@
               android:label="fragment_empty" tools:layout="@layout/fragment_empty"/>
     <fragment android:id="@+id/empty1Fragment" android:name="com.example.palina.lr1.fragments.Empty1Fragment"
               android:label="fragment_empty1" tools:layout="@layout/fragment_empty1"/>
-    <fragment android:id="@+id/loginFragment" android:name="com.example.palina.lr1.fragments.LoginFragment"
-              android:label="fragment_login" tools:layout="@layout/fragment_login"/>
-    <fragment android:id="@+id/registerFragment" android:name="com.example.palina.lr1.fragments.RegisterFragment"
-              android:label="fragment_register" tools:layout="@layout/fragment_register"/>
 
 </navigation>

@@ -16,7 +16,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.navigation.fragment.findNavController
+import com.example.palina.lr1.LoginActivity
 import com.example.palina.lr1.R
 import com.example.palina.lr1.models.User
 import com.example.palina.lr1.utils.AsyncLoader
@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
 
-    val db = DatabaseHelper.dataBase
+    private val db = DatabaseHelper.dataBase
 
     private val PERMISSIONS_REQUEST_CAMERA = Constants.PERMISSIONS_REQUEST_CAMERA
     private val CAMERA_REQUEST_CODE = Constants.CAMERA_REQUEST_CODE
@@ -37,7 +37,8 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         if (!db.isAuthUser()) {
-            findNavController().navigate(R.id.loginFragment)
+            activity!!.finish()
+            startActivity(Intent(context, LoginActivity::class.java))
             return null
         }
         return inflater.inflate(R.layout.fragment_home, container, false)
@@ -116,11 +117,12 @@ class HomeFragment : Fragment() {
     private fun changeData(destroy : Boolean = false) {
         if (db.getCurrentUser() == null)
             return
-        if (!compareUserData(changeUserData(), db.getCurrentUser())) {
+        val newUser = changeUserData()
+        if (!compareUserData(newUser, db.getCurrentUser())) {
             val dialog = AlertDialog.Builder(activity!!)
             dialog.setMessage("Save your changes?")
             dialog.setPositiveButton("Yes") { _, _ ->
-                db.changeUser(changeUserData())
+                db.changeUser(newUser)
                 if (!destroy) {
                     profile_switcher.showNext()
                     getData()

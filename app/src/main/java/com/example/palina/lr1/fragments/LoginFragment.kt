@@ -2,6 +2,7 @@ package com.example.palina.lr1.fragments
 
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.example.palina.lr1.R
 import androidx.navigation.fragment.findNavController
+import com.example.palina.lr1.MainActivity
 import com.example.palina.lr1.utils.AsyncLoader
 import com.example.palina.lr1.utils.DatabaseHelper
 import com.example.palina.lr1.utils.LayoutHelper
@@ -20,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginFragment : Fragment() {
 
-    val db = DatabaseHelper.dataBase
+    private val db = DatabaseHelper.dataBase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +59,8 @@ class LoginFragment : Fragment() {
                     override fun onPostExecute() {
                         progressDialog.dismiss()
                         if (db.isSignIn == true) {
-                            findNavController().navigate(R.id.homeFragment)
+                            activity!!.finish()
+                            startActivity(Intent(context, MainActivity::class.java))
                             return
                         }
                         else

@@ -15,6 +15,7 @@
     <item
         android:id="@+id/empty1Fragment"
         android:enabled="true"
+        android:icon="@drawable/baseline_close_black_24dp"
         android:title="@string/text_logout"
         app:showAsAction="ifRoom"/>
 </menu>

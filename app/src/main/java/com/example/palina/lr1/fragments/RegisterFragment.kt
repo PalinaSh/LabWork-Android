@@ -35,7 +35,6 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        LayoutHelper.SetLayoutHeight(activity, view, R.id.registerRelativeLayout)
 
         registerName.addTextChangedListener(TextFieldValidation(registerName))
         registerSurname.addTextChangedListener(TextFieldValidation(registerSurname))

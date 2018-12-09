@@ -22,6 +22,9 @@ import com.example.palina.lr1.models.User
 import com.example.palina.lr1.utils.AsyncLoader
 import com.example.palina.lr1.utils.Constants
 import com.example.palina.lr1.utils.DatabaseHelper
+import com.example.palina.lr1.validation.EmailValidation
+import com.example.palina.lr1.validation.PhoneValidation
+import com.example.palina.lr1.validation.TextFieldValidation
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
@@ -32,13 +35,15 @@ class HomeFragment : Fragment() {
     private val CAMERA_REQUEST_CODE = Constants.CAMERA_REQUEST_CODE
     private val GALLERY_REQUEST_CODE = Constants.GALLERY_REQUEST_CODE
 
+    private var edit: Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         if (!db.isAuthUser()) {
-            activity!!.finish()
             startActivity(Intent(context, LoginActivity::class.java))
+            activity!!.finish()
             return null
         }
         return inflater.inflate(R.layout.fragment_home, container, false)
@@ -47,17 +52,28 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        photo_camera.setOnClickListener{
-            showDialog()
+        avatar.setOnClickListener{
+            if (edit)
+                showDialog()
         }
 
         edit_button.setOnClickListener{
-            profile_switcher.showNext()
+            if (edit) {
+                edit = false
+                changeData()
+                edit_button.setImageResource(R.drawable.baseline_edit_black_24dp)
+            }
+            else {
+                edit = true
+                profile_switcher.showNext()
+                edit_button.setImageResource(R.drawable.baseline_done_black_24dp)
+            }
         }
 
-        ok_button.setOnClickListener{
-            changeData()
-        }
+        nameEdit.addTextChangedListener(TextFieldValidation(nameEdit))
+        surnameEdit.addTextChangedListener(TextFieldValidation(surnameEdit))
+        emailEdit.addTextChangedListener(EmailValidation(emailEdit))
+        phoneEdit.addTextChangedListener(PhoneValidation(phoneEdit))
 
         val progressDialog = ProgressDialog(context)
         progressDialog.setMessage("Get data...")
@@ -84,6 +100,8 @@ class HomeFragment : Fragment() {
             override fun doInBackground() {
                 while (true) {
                     if ((db.getCurrentUser() != null) and (db.getCurrentAvatar() != null))
+                        break
+                    if ((db.getCurrentUser() != null) and (db.isSuccessDownLoadPhoto == false))
                         break
                 }
             }
@@ -119,8 +137,9 @@ class HomeFragment : Fragment() {
             return
         val newUser = changeUserData()
         if (!compareUserData(newUser, db.getCurrentUser())) {
-            val dialog = AlertDialog.Builder(activity!!)
+            val dialog = AlertDialog.Builder(context!!)
             dialog.setMessage("Save your changes?")
+            dialog.setCancelable(false)
             dialog.setPositiveButton("Yes") { _, _ ->
                 db.changeUser(newUser)
                 if (!destroy) {

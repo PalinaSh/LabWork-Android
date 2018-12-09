@@ -32,8 +32,8 @@ class MainActivity : AppCompatActivity() {
             when (destination.id){
                 R.id.empty1Fragment -> {
                     db.signOut()
-                    this.finish()
                     startActivity(Intent(this.applicationContext, LoginActivity::class.java))
+                    this.finish()
                 }
             }
         }

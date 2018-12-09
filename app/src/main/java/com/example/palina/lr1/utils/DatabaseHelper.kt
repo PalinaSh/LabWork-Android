@@ -7,15 +7,8 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.ByteArrayOutputStream
-import com.google.firebase.storage.FileDownloadTask
-import com.google.firebase.storage.OnProgressListener
-import androidx.annotation.NonNull
-import com.google.android.gms.tasks.OnFailureListener
 import android.graphics.BitmapFactory
-import com.google.android.gms.tasks.OnSuccessListener
-import android.app.ProgressDialog
 import java.io.File
-
 
 val DATABASE_NAME = "users"
 val STORAGE_NAME = "avatars"
@@ -25,24 +18,20 @@ class DatabaseHelper private constructor(){
     private var currentUser: User? = null
     private var currentAvatar : Bitmap? = null
 
-    private var db: DatabaseReference
-    private var auth: FirebaseAuth? = null
-    private var storage: StorageReference
+    private var db: DatabaseReference = FirebaseDatabase.getInstance().getReference(DATABASE_NAME)
+    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var storage: StorageReference = FirebaseStorage.getInstance().getReference(STORAGE_NAME)
 
     var isSignUp: Boolean? = null
     var isSignIn: Boolean? = null
-    var isSuccessLoadPhoto: Boolean? = null
-    var isSuccessDownloadAvatar: Boolean? = null
+    var isSuccessDownLoadPhoto: Boolean? = null
 
     init {
-        db = FirebaseDatabase.getInstance().getReference(DATABASE_NAME)
-        auth = FirebaseAuth.getInstance()
-        storage = FirebaseStorage.getInstance().getReference(STORAGE_NAME)
         setListenerOnDatabase()
     }
 
     fun isAuthUser(): Boolean {
-        return auth?.currentUser != null
+        return auth.currentUser != null
     }
 
     fun getCurrentUser(): User? {
@@ -55,7 +44,7 @@ class DatabaseHelper private constructor(){
 
     fun signUser(email: String, password: String){
         isSignIn = null
-        auth?.signInWithEmailAndPassword(email, password)?.addOnCompleteListener { task ->
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             isSignIn = if (task.isSuccessful) {
                 setListenerOnDatabase()
                 true
@@ -67,13 +56,13 @@ class DatabaseHelper private constructor(){
 
     fun registerUser(user: User) {
         isSignUp = null
-        auth?.createUserWithEmailAndPassword(user.email, user.password)?.addOnCompleteListener { task ->
+        auth.createUserWithEmailAndPassword(user.email, user.password).addOnCompleteListener { task ->
             isSignUp = if (task.isSuccessful) {
                 setListenerOnDatabase()
                 signUser(user.email, user.password)
                 user.password = "????"
                 currentUser = user
-                db.child(auth?.currentUser!!.uid).setValue(user)
+                db.child(auth.currentUser!!.uid).setValue(user)
                 true
             } else {
                 false
@@ -82,17 +71,18 @@ class DatabaseHelper private constructor(){
     }
 
     fun signOut() {
-        auth?.signOut()
+        auth.signOut()
         currentUser = null
+        currentAvatar = null
     }
 
     fun changeUser(newUserData: User) {
         if (currentUser?.email != newUserData.email) {
-            auth?.currentUser?.updateEmail(newUserData.email)
+            auth.currentUser?.updateEmail(newUserData.email)
         }
 
         if (currentUser != newUserData) {
-            db.child(auth?.currentUser!!.uid).setValue(newUserData)
+            db.child(auth.currentUser!!.uid).setValue(newUserData)
             currentUser = newUserData
         }
     }
@@ -101,39 +91,33 @@ class DatabaseHelper private constructor(){
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
-
-        isSuccessLoadPhoto = null
-        val uploadTask = storage.child(auth?.currentUser!!.uid).putBytes(data)
-        uploadTask.addOnCompleteListener { task ->
-            isSuccessLoadPhoto = task.isSuccessful
-        }
+        storage.child(auth.currentUser!!.uid).putBytes(data)
     }
 
     fun getPhoto() {
-        isSuccessDownloadAvatar = null
         try {
             val localFile = File.createTempFile("avatar", ".jpg")
 
-            storage.child(auth?.currentUser!!.uid).getFile(localFile).addOnCompleteListener { task ->
+            isSuccessDownLoadPhoto = null
+            storage.child(auth.currentUser!!.uid).getFile(localFile).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     currentAvatar = BitmapFactory.decodeFile(localFile.absolutePath)
-                    isSuccessDownloadAvatar = true
+                    isSuccessDownLoadPhoto = true
                 }
                 else
-                    isSuccessDownloadAvatar = false
+                    isSuccessDownLoadPhoto = false
             }
         }
         catch (e: Exception) {
             currentAvatar = null
-            isSuccessDownloadAvatar = false
         }
     }
 
     private fun setListenerOnDatabase() {
         db.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (auth?.currentUser != null)
-                    currentUser = dataSnapshot.child(auth?.currentUser!!.uid).getValue(User::class.java)
+                if (auth.currentUser != null)
+                    currentUser = dataSnapshot.child(auth.currentUser!!.uid).getValue(User::class.java)
             }
             override fun onCancelled(databaseError: DatabaseError) {}
         })

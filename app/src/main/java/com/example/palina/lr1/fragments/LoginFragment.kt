@@ -34,8 +34,6 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        LayoutHelper.SetLayoutHeight(activity, view, R.id.loginRelativeLayout)
-
         loginEmail.addTextChangedListener(EmailValidation(loginEmail))
         loginPassword.addTextChangedListener(PasswordValidation(loginPassword))
 
@@ -59,7 +57,7 @@ class LoginFragment : Fragment() {
                     override fun onPostExecute() {
                         progressDialog.dismiss()
                         if (db.isSignIn == true) {
-                            activity!!.finish()
+                            activity?.finish()
                             startActivity(Intent(context, MainActivity::class.java))
                             return
                         }

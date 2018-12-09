@@ -16,8 +16,10 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.example.palina.lr1.LoginActivity
 import com.example.palina.lr1.R
+import com.example.palina.lr1.databinding.FragmentHomeBinding
 import com.example.palina.lr1.models.User
 import com.example.palina.lr1.utils.AsyncLoader
 import com.example.palina.lr1.utils.Constants
@@ -25,6 +27,7 @@ import com.example.palina.lr1.utils.DatabaseHelper
 import com.example.palina.lr1.validation.EmailValidation
 import com.example.palina.lr1.validation.PhoneValidation
 import com.example.palina.lr1.validation.TextFieldValidation
+import com.example.palina.lr1.viewModels.UserViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
@@ -36,6 +39,7 @@ class HomeFragment : Fragment() {
     private val GALLERY_REQUEST_CODE = Constants.GALLERY_REQUEST_CODE
 
     private var edit: Boolean = false
+    private var binding: FragmentHomeBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +50,12 @@ class HomeFragment : Fragment() {
             activity!!.finish()
             return null
         }
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = DataBindingUtil.inflate(inflater ,R.layout.fragment_home,container , false)
+        val myView: View?  = binding?.root
+
+        binding?.user = UserViewModel("Your name", "Your surname", "mail@mail.ru", "+375290000000")
+
+        return myView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -93,8 +102,6 @@ class HomeFragment : Fragment() {
                     return
                 }
                 getData()
-                downloadPhoto()
-                setData()
             }
 
             override fun doInBackground() {
@@ -109,11 +116,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun getData() {
-        val user = db.getCurrentUser()
-        name.text = user?.name
-        surname.text = user?.surname
-        phoneNumber.text = user?.phone
-        email.text = user?.email
+        val currentUser = db.getCurrentUser()
+        binding?.user = UserViewModel(currentUser!!.name, currentUser.surname, currentUser.email, currentUser.phone)
+        downloadPhoto()
     }
 
     private fun downloadPhoto(){
@@ -124,18 +129,11 @@ class HomeFragment : Fragment() {
             avatar.setImageBitmap(downloadPhoto)
     }
 
-    private fun setData(){
-        val user = db.getCurrentUser()
-        nameEdit.text = SpannableStringBuilder(user?.name)
-        surnameEdit.text = SpannableStringBuilder(user?.surname)
-        emailEdit.text = SpannableStringBuilder(user?.email)
-        phoneEdit.text = SpannableStringBuilder(user?.phone)
-    }
-
     private fun changeData(destroy : Boolean = false) {
         if (db.getCurrentUser() == null)
             return
-        val newUser = changeUserData()
+        val newUser = User(binding?.user!!.name.trim(), binding?.user!!.surname.trim(),
+            binding?.user!!.email.trim(),"????", binding?.user!!.phone.trim())
         if (!compareUserData(newUser, db.getCurrentUser())) {
             val dialog = AlertDialog.Builder(context!!)
             dialog.setMessage("Save your changes?")
@@ -143,9 +141,8 @@ class HomeFragment : Fragment() {
             dialog.setPositiveButton("Yes") { _, _ ->
                 db.changeUser(newUser)
                 if (!destroy) {
-                    profile_switcher.showNext()
                     getData()
-                    setData()
+                    profile_switcher.showNext()
                 }
             }
             dialog.setNegativeButton("No") { _, _ ->
@@ -157,14 +154,6 @@ class HomeFragment : Fragment() {
         else
             if (!destroy)
                 profile_switcher?.showNext()
-    }
-
-    private fun changeUserData() : User {
-        return User(nameEdit.text.toString().trim(),
-                    surnameEdit.text.toString().trim(),
-                    emailEdit.text.toString().trim(),
-                    "????",
-                    phoneEdit.text.toString().trim())
     }
 
     private fun compareUserData(newUser: User, currentUser: User?) : Boolean {
@@ -212,11 +201,11 @@ class HomeFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        val avatar = view?.findViewById<ImageView>(R.id.avatar)
+        //val avatar = view?.findViewById<ImageView>(R.id.avatar)
         when(requestCode){
             CAMERA_REQUEST_CODE -> {
                 if (data != null){
-                    avatar?.setImageBitmap(data.extras!!.get("data") as Bitmap)
+                    avatar.setImageBitmap(data.extras!!.get("data") as Bitmap)
                     db.setPhoto(data.extras!!.get("data") as Bitmap)
                 }
             }
@@ -224,7 +213,7 @@ class HomeFragment : Fragment() {
                 if (data != null) {
                     val contentURI = data.data
                     val bitmap = MediaStore.Images.Media.getBitmap(activity!!.contentResolver, contentURI)
-                    avatar?.setImageBitmap(bitmap)
+                    avatar.setImageBitmap(bitmap)
                     db.setPhoto(bitmap)
                 }
             }

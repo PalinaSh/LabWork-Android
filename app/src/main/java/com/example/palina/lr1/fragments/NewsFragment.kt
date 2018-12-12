@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.palina.lr1.R
+import com.example.palina.lr1.databases.SqLiteHelper
 import com.example.palina.lr1.models.RssNew
 import com.example.palina.lr1.utils.AsyncLoader
 import com.example.palina.lr1.utils.RecyclerViewAdapter
@@ -16,6 +17,9 @@ import kotlinx.android.synthetic.main.fragment_news.*
 import java.net.URL
 
 class NewsFragment : Fragment() {
+
+    private var db : SqLiteHelper? = null
+    private var urlLink : String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,7 +32,7 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val urlLink =  arguments?.getString("selectedUrl")
+        urlLink =  arguments?.getString("selectedUrl")
         var urls: ArrayList<RssNew>? = null
         val progressDialog = ProgressDialog(context)
         progressDialog.setMessage("Wait")
@@ -47,6 +51,18 @@ class NewsFragment : Fragment() {
                 recyclerView.layoutManager = LinearLayoutManager(context)
 
                 progressDialog.dismiss()
+
+                if (urls?.count()!! >= 10) {
+                    val cash = ArrayList<RssNew>()
+                    var i = 0
+                    while (cash.count() < 10) {
+                        cash.add(urls!![i])
+                        ++i
+                    }
+                    db = SqLiteHelper(context!!, urlLink!!)
+                    db?.clearDatabase()
+                    db?.writeRssNews(cash)
+                }
             }
 
             override fun doInBackground() {
@@ -55,7 +71,10 @@ class NewsFragment : Fragment() {
                     val inputStream = url.openConnection().getInputStream()
                     urls = XmlToRssFeedParser.parse(inputStream)
                 }
-                catch (e:Exception) { }
+                catch (e:Exception) {
+                    db = SqLiteHelper(context!!, urlLink!!)
+                    urls = db?.readRssNews()
+                }
             }
         }).execute()
     }

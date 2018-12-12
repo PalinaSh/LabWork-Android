@@ -7,5 +7,6 @@ class Constants {
         const val CAMERA_REQUEST_CODE: Int = 3
         const val GALLERY_REQUEST_CODE: Int = 4
         const val STORAGE_FILENAME: String = "links"
+        const val SQLITEDATABASE_NAME: String = "RssCash"
     }
 }

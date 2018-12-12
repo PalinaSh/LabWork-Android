@@ -4,7 +4,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 
-class EmailValidation (val email: EditText?) : TextWatcher {
+class UrlValidation (private val url: EditText?) : TextWatcher {
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
@@ -13,15 +13,15 @@ class EmailValidation (val email: EditText?) : TextWatcher {
     override fun afterTextChanged(s: Editable?) {
 
         isValid = false
-        val emailString: String  = email?.text.toString()
+        val urlString: String  = url?.text.toString()
 
-        if (emailString.isEmpty()){
-            email?.error = "Email is required"
+        if (urlString.isEmpty()){
+            url?.error = "Field is required"
             return
         }
 
-        if (!emailString.matches("^([a-z0-9_-]+\\.)*[a-z0-9_-]+@[a-z0-9_-]+(\\.[a-z0-9_-]+)*\\.[a-z]{2,6}\$".toRegex())) {
-            email?.error = "Invalid url"
+        if (!urlString.matches("^(http|ftp|https)://([\\w_-]+(?:(?:\\.[\\w_-]+)+))([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?".toRegex())) {
+            url?.error = "Invalid url"
             return
         }
 

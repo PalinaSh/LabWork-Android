@@ -10,6 +10,7 @@
     <string name="IMEI">Device IMEI:</string>
     <string name="text_profile">Profile</string>
     <string name="text_empty">Empty</string>
+    <string name="text_news">News</string>
     <string name="text_logout">Logout</string>
     <string name="description_telephone">Phone</string>
     <string name="description_email">Email</string>

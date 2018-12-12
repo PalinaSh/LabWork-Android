@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.SpannableStringBuilder
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +22,7 @@ import com.example.palina.lr1.databinding.FragmentHomeBinding
 import com.example.palina.lr1.models.User
 import com.example.palina.lr1.utils.AsyncLoader
 import com.example.palina.lr1.utils.Constants
-import com.example.palina.lr1.utils.DatabaseHelper
+import com.example.palina.lr1.databases.DatabaseHelper
 import com.example.palina.lr1.validation.EmailValidation
 import com.example.palina.lr1.validation.PhoneValidation
 import com.example.palina.lr1.validation.TextFieldValidation
@@ -147,6 +146,7 @@ class HomeFragment : Fragment() {
             }
             dialog.setNegativeButton("No") { _, _ ->
                 if (!destroy)
+                    getData()
                     profile_switcher?.showNext()
             }
             dialog.show()
@@ -200,8 +200,6 @@ class HomeFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        //val avatar = view?.findViewById<ImageView>(R.id.avatar)
         when(requestCode){
             CAMERA_REQUEST_CODE -> {
                 if (data != null){

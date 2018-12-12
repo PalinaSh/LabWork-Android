@@ -12,5 +12,11 @@
               android:label="fragment_empty" tools:layout="@layout/fragment_empty"/>
     <fragment android:id="@+id/empty1Fragment" android:name="com.example.palina.lr1.fragments.Empty1Fragment"
               android:label="fragment_empty1" tools:layout="@layout/fragment_empty1"/>
+    <fragment android:id="@+id/newsSettingsFragment" android:name="com.example.palina.lr1.fragments.NewsSettingsFragment"
+              android:label="fragment_news_settings" tools:layout="@layout/fragment_news_settings"/>
+    <fragment android:id="@+id/newsFragment" android:name="com.example.palina.lr1.fragments.NewsFragment"
+              android:label="fragment_news" tools:layout="@layout/fragment_news"/>
+    <fragment android:id="@+id/listUrlFragment" android:name="com.example.palina.lr1.fragments.ListUrlFragment"
+              android:label="fragment_list_url" tools:layout="@layout/fragment_list_url"/>
 
 </navigation>

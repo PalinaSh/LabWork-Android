@@ -13,8 +13,7 @@ import com.example.palina.lr1.R
 import androidx.navigation.fragment.findNavController
 import com.example.palina.lr1.MainActivity
 import com.example.palina.lr1.utils.AsyncLoader
-import com.example.palina.lr1.utils.DatabaseHelper
-import com.example.palina.lr1.utils.LayoutHelper
+import com.example.palina.lr1.databases.DatabaseHelper
 import com.example.palina.lr1.validation.EmailValidation
 import com.example.palina.lr1.validation.PasswordValidation
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -62,7 +61,7 @@ class LoginFragment : Fragment() {
                             return
                         }
                         else
-                            Toast.makeText(context, "Invalid email or password", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Invalid url or password", Toast.LENGTH_SHORT).show()
                     }
 
                     override fun doInBackground() {

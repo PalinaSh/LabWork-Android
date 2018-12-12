@@ -11,7 +11,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.ui.setupWithNavController
-import com.example.palina.lr1.utils.DatabaseHelper
+import com.example.palina.lr1.databases.DatabaseHelper
 
 class MainActivity : AppCompatActivity() {
 

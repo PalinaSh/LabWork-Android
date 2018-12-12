@@ -1,4 +1,4 @@
-package com.example.palina.lr1.utils
+package com.example.palina.lr1.databases
 
 import android.graphics.Bitmap
 import com.example.palina.lr1.models.User

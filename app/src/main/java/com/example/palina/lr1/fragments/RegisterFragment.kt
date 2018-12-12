@@ -9,13 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.navigation.fragment.findNavController
 import com.example.palina.lr1.MainActivity
 import com.example.palina.lr1.R
 import com.example.palina.lr1.models.User
 import com.example.palina.lr1.utils.AsyncLoader
-import com.example.palina.lr1.utils.DatabaseHelper
-import com.example.palina.lr1.utils.LayoutHelper
+import com.example.palina.lr1.databases.DatabaseHelper
 import com.example.palina.lr1.validation.EmailValidation
 import com.example.palina.lr1.validation.PasswordValidation
 import com.example.palina.lr1.validation.PhoneValidation

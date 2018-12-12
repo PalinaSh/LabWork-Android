@@ -5,9 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
-import com.example.palina.lr1.utils.DatabaseHelper
 
 class LoginActivity : AppCompatActivity() {
 

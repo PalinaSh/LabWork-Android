@@ -6,5 +6,6 @@ class Constants {
         const val PERMISSIONS_REQUEST_CAMERA: Int = 2
         const val CAMERA_REQUEST_CODE: Int = 3
         const val GALLERY_REQUEST_CODE: Int = 4
+        const val STORAGE_FILENAME: String = "links"
     }
 }

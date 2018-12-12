@@ -8,9 +8,9 @@
         android:title="@string/text_profile"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/emptyFragment"
+        android:id="@+id/listUrlFragment"
         android:enabled="true"
-        android:title="@string/text_empty"
+        android:title="@string/text_news"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/empty1Fragment"

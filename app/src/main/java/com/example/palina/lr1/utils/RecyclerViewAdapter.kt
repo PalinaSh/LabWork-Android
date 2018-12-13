@@ -1,13 +1,16 @@
 package com.example.palina.lr1.utils
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.palina.lr1.R
+import com.example.palina.lr1.WebViewActivity
 import com.example.palina.lr1.models.RssNew
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
@@ -32,16 +35,28 @@ class RecyclerViewAdapter: RecyclerView.Adapter<ViewHolder>() {
     }
 }
 
-class ViewHolder constructor(view: View, var context: Context) : RecyclerView.ViewHolder(view) {
+class ViewHolder constructor(view: View, var context: Context) : RecyclerView.ViewHolder(view), View.OnClickListener {
     private val title: TextView = view.findViewById(R.id.cardTitle)
     private val description: TextView = view.findViewById(R.id.cardContent)
     private val date: TextView = view.findViewById(R.id.cardDate)
     private val image: ImageView = view.findViewById(R.id.cardImage)
+    private var url: String? = null
+
+    override fun onClick(v: View) {
+        val intent = Intent(context, WebViewActivity::class.java)
+        intent.putExtra("link", this.url)
+        startActivity(context, intent,null)
+    }
+
+    init {
+        view.setOnClickListener(this)
+    }
 
     fun updateWithPage(news: RssNew){
         title.text = news.title
         description.text = news.description
         date.text = getDateFormat(news.date)
+        url = news.url
 
         if (news.description.length < 70)
             description.text = news.description

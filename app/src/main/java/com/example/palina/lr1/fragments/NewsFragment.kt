@@ -1,12 +1,14 @@
 package com.example.palina.lr1.fragments
 
 import android.app.ProgressDialog
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.palina.lr1.R
 import com.example.palina.lr1.databases.SqLiteHelper
 import com.example.palina.lr1.models.RssNew
@@ -19,7 +21,6 @@ import java.net.URL
 class NewsFragment : Fragment() {
 
     private var db : SqLiteHelper? = null
-    private var urlLink : String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +33,7 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        urlLink =  arguments?.getString("selectedUrl")
+        val urlLink = arguments?.getString("selectedUrl")
         var urls: ArrayList<RssNew>? = null
         val progressDialog = ProgressDialog(context)
         progressDialog.setMessage("Wait")
@@ -51,6 +52,9 @@ class NewsFragment : Fragment() {
                 recyclerView.layoutManager = LinearLayoutManager(context)
 
                 progressDialog.dismiss()
+
+                if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+                    recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
                 if (urls?.count()!! >= 10) {
                     val cash = ArrayList<RssNew>()

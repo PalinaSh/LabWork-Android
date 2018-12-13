@@ -65,7 +65,7 @@ class SqLiteHelper (context: Context, tableName: String) : SQLiteOpenHelper(cont
         db.close()
     }
 
-    fun readRssNews(): ArrayList<RssNew>?{
+    fun readRssNews(): ArrayList<RssNew>{
         val news = ArrayList<RssNew>()
         val db = this.readableDatabase
         this.onUpgrade(db, 1, 1)

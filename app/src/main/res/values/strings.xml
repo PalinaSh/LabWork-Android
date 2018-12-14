@@ -26,6 +26,9 @@
     <string name="button_login">Login</string>
     <string name="about">About</string>
     <string name="greeting">Hello, new user :)</string>
+    <string name="noConnection">No internet connection</string>
+    <string name="incorrectRSS">"RSS url is incorrect"</string>
+    <string name="selectedUrl">selectedUrl</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

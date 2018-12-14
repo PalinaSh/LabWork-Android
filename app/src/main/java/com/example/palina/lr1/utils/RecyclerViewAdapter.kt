@@ -2,14 +2,17 @@ package com.example.palina.lr1.utils
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.palina.lr1.R
+import com.example.palina.lr1.RssReaderActivity
 import com.example.palina.lr1.WebViewActivity
 import com.example.palina.lr1.models.RssNew
 import com.squareup.picasso.Picasso
@@ -43,9 +46,13 @@ class ViewHolder constructor(view: View, var context: Context) : RecyclerView.Vi
     private var url: String? = null
 
     override fun onClick(v: View) {
+        if (!InternetConnectionHelper.isInternetConnection(context)) {
+            Toast.makeText(context, "No internet connection", Toast.LENGTH_SHORT).show()
+            return
+        }
         val intent = Intent(context, WebViewActivity::class.java)
         intent.putExtra("link", this.url)
-        startActivity(context, intent,null)
+        startActivity(context, intent, null)
     }
 
     init {

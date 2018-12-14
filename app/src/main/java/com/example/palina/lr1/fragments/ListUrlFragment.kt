@@ -1,5 +1,6 @@
 package com.example.palina.lr1.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.palina.lr1.R
 import kotlinx.android.synthetic.main.fragment_list_url.*
 import android.widget.ArrayAdapter
+import com.example.palina.lr1.RssReaderActivity
 import com.example.palina.lr1.utils.Constants
 import com.example.palina.lr1.databases.ExternalStorageHelper.Companion.openFile
 
@@ -41,9 +43,10 @@ class ListUrlFragment : Fragment() {
         }
 
         listUrls.onItemClickListener = AdapterView.OnItemClickListener{ _, _, position, _ ->
-            val bundle = Bundle()
-            bundle.putString("selectedUrl", adapter.getItem(position))
-            findNavController().navigate(R.id.newsFragment, bundle)
+            val intent = Intent(context, RssReaderActivity::class.java)
+            intent.putExtra("selectedUrl", adapter.getItem(position))
+            startActivity(intent)
+            activity?.finish()
         }
     }
 }

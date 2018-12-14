@@ -38,6 +38,10 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(this.applicationContext, LoginActivity::class.java))
                     this.finish()
                 }
+                R.id.rssReaderActivity -> {
+                    startActivity(Intent(this.applicationContext, RssReaderActivity::class.java))
+                    this.finish()
+                }
             }
         }
 

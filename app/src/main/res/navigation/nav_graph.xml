@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph"
-            app:startDestination="@id/homeFragment">
+            app:startDestination="@id/listUrlFragment">
 
     <fragment android:id="@+id/homeFragment" android:name="com.example.palina.lr1.fragments.HomeFragment"
               android:label="fragment_home" tools:layout="@layout/fragment_home"/>
@@ -14,9 +14,9 @@
               android:label="fragment_empty1" tools:layout="@layout/fragment_empty1"/>
     <fragment android:id="@+id/newsSettingsFragment" android:name="com.example.palina.lr1.fragments.NewsSettingsFragment"
               android:label="fragment_news_settings" tools:layout="@layout/fragment_news_settings"/>
-    <fragment android:id="@+id/newsFragment" android:name="com.example.palina.lr1.fragments.NewsFragment"
-              android:label="fragment_news" tools:layout="@layout/fragment_news"/>
     <fragment android:id="@+id/listUrlFragment" android:name="com.example.palina.lr1.fragments.ListUrlFragment"
               android:label="fragment_list_url" tools:layout="@layout/fragment_list_url"/>
+    <activity android:id="@+id/rssReaderActivity" android:name="com.example.palina.lr1.RssReaderActivity"
+              android:label="RssReaderActivity"/>
 
 </navigation>

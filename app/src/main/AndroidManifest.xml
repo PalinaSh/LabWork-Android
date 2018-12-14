@@ -36,7 +36,11 @@
         <activity android:name=".RssReaderActivity"
                   android:screenOrientation="${screenOrientation}"/>
         <activity android:name=".WebViewActivity"
-                  android:screenOrientation="${screenOrientation}"/>
+                  android:screenOrientation="${screenOrientation}">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".RssReaderActivity" />
+        </activity>
     </application>
 
 </manifest>

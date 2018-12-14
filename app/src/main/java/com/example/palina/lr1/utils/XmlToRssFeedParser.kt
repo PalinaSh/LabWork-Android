@@ -8,7 +8,7 @@ import java.lang.Exception
 
 class XmlToRssFeedParser {
     companion object {
-        fun parse(inputStream: InputStream): ArrayList<RssNew>? {
+        fun parse(inputStream: InputStream, parentUrl: String): ArrayList<RssNew>? {
             var title: String? = null
             var url: String? = null
             var description: String? = null
@@ -32,7 +32,7 @@ class XmlToRssFeedParser {
                             if (title != null && url != null && description != null) {
                                 if (isItem) {
                                     val item = RssNew(title = title, url = url, description = description,
-                                        date = date ?: "", image = imageUrl ?: "")
+                                        date = date ?: "", image = imageUrl ?: "", parentUrl = parentUrl)
                                     items.add(item)
                                 }
                                 title = null

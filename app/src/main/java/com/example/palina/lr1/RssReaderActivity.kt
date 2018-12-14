@@ -91,10 +91,10 @@ class RssReaderActivity : AppCompatActivity() {
                 try {
                     val url = URL(urlLink)
                     val inputStream = url.openConnection().getInputStream()
-                    urls = XmlToRssFeedParser.parse(inputStream)
+                    urls = XmlToRssFeedParser.parse(inputStream, urlLink)
                 }
                 catch (e:Exception) {
-                    val db = SqLiteHelper(applicationContext, urlLink!!)
+                    val db = SqLiteHelper(applicationContext, urlLink)
                     urls = db.readRssNews()
                 }
             }

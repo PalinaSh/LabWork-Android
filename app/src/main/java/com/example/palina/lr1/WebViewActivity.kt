@@ -1,15 +1,24 @@
 package com.example.palina.lr1
 
 import android.annotation.TargetApi
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_web_view.*
+import androidx.core.app.NavUtils
+
+
 
 class WebViewActivity : AppCompatActivity() {
+    var url: String? = null
+    var parentUrl: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web_view)
@@ -18,7 +27,20 @@ class WebViewActivity : AppCompatActivity() {
         webView.settings.javaScriptEnabled = true
 
         val arguments = intent.extras
-        webView.loadUrl(arguments?.get("link")?.toString())
+        url = arguments?.get("link")?.toString()
+        parentUrl = arguments?.get("parentUrl")?.toString()
+        webView.loadUrl(url)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        onBackPressed()
+        return true
     }
 
     override fun onBackPressed() {

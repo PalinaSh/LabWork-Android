@@ -44,6 +44,7 @@ class ViewHolder constructor(view: View, var context: Context) : RecyclerView.Vi
     private val date: TextView = view.findViewById(R.id.cardDate)
     private val image: ImageView = view.findViewById(R.id.cardImage)
     private var url: String? = null
+    private var parentUrl: String? = null
 
     override fun onClick(v: View) {
         if (!InternetConnectionHelper.isInternetConnection(context)) {
@@ -52,6 +53,7 @@ class ViewHolder constructor(view: View, var context: Context) : RecyclerView.Vi
         }
         val intent = Intent(context, WebViewActivity::class.java)
         intent.putExtra("link", this.url)
+        intent.putExtra("parentUrl", this.parentUrl)
         startActivity(context, intent, null)
     }
 
@@ -64,6 +66,7 @@ class ViewHolder constructor(view: View, var context: Context) : RecyclerView.Vi
         description.text = news.description
         date.text = getDateFormat(news.date)
         url = news.url
+        parentUrl = news.parentUrl
 
         if (news.description.length < 70)
             description.text = news.description

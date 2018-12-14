@@ -19,6 +19,16 @@ class ExternalStorageHelper {
             }
         }
 
+        fun clearFile(fileName: String, activity: Activity){
+            try {
+                val outputStream = activity.openFileOutput(fileName, Activity.MODE_PRIVATE)
+                val osw = OutputStreamWriter(outputStream)
+                osw.write("")
+                osw.close()
+            } catch (t: Throwable) {
+            }
+        }
+
         fun openFile(fileName: String, activity: Activity) : ArrayList<String> {
             val urls = ArrayList<String>()
             try {

@@ -1,15 +1,18 @@
 package com.example.palina.lr1.databases
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.palina.lr1.databases.ExternalStorageHelper.Companion.clearFile
+import com.example.palina.lr1.databases.ExternalStorageHelper.Companion.openFile
 import com.example.palina.lr1.models.RssNew
 import com.example.palina.lr1.utils.Constants
 
 class SqLiteHelper (context: Context, tableName: String) : SQLiteOpenHelper(context, Constants.SQLITEDATABASE_NAME, null, 1) {
 
-    private val TABLE_NAME = tableName.split(':')[1].split('/')[2].split('.')[0]
+    private var TABLE_NAME = Constants.getTableName(tableName)
     private val COL_TITLE = "title"
     private val COL_DATE = "date"
     private val COL_DESCRIPTION = "description"
@@ -60,9 +63,19 @@ class SqLiteHelper (context: Context, tableName: String) : SQLiteOpenHelper(cont
 
     fun clearDatabase(){
         val db = this.writableDatabase
+        this.onUpgrade(db, 1, 1)
         db.execSQL("DELETE FROM $TABLE_NAME")
         //db.execSQL("DROP TABLE $TABLE_NAME")
         db.close()
+    }
+
+    fun clearAllDatabases(activity: Activity){
+        val tableNames = openFile(Constants.STORAGE_FILENAME, activity)
+        for (name in tableNames) {
+            this.TABLE_NAME = Constants.getTableName(name)
+            clearDatabase()
+        }
+        //clearFile(Constants.STORAGE_FILENAME, activity)
     }
 
     fun readRssNews(): ArrayList<RssNew>{

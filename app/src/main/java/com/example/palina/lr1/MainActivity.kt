@@ -12,6 +12,7 @@ import androidx.navigation.ui.onNavDestinationSelected
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.ui.setupWithNavController
 import com.example.palina.lr1.databases.DatabaseHelper
+import com.example.palina.lr1.databases.SqLiteHelper
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity() {
             when (destination.id){
                 R.id.empty1Fragment -> {
                     db.signOut()
+                    val sqliteDb = SqLiteHelper(this.applicationContext, "")
+                    sqliteDb.clearAllDatabases(this)
                     startActivity(Intent(this.applicationContext, LoginActivity::class.java))
                     this.finish()
                 }

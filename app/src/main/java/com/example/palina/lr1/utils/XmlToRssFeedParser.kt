@@ -4,10 +4,11 @@ import android.util.Xml
 import com.example.palina.lr1.models.RssNew
 import org.xmlpull.v1.XmlPullParser
 import java.io.InputStream
+import java.lang.Exception
 
 class XmlToRssFeedParser {
     companion object {
-        fun parse(inputStream: InputStream): ArrayList<RssNew> {
+        fun parse(inputStream: InputStream): ArrayList<RssNew>? {
             var title: String? = null
             var url: String? = null
             var description: String? = null
@@ -69,7 +70,9 @@ class XmlToRssFeedParser {
                 }
 
                 return items
-            } finally {
+            }
+            catch (e: Exception){ return null }
+            finally {
                 inputStream.close()
             }
         }

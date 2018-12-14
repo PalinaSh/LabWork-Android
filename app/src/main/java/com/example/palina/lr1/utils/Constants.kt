@@ -8,5 +8,11 @@ class Constants {
         const val GALLERY_REQUEST_CODE: Int = 4
         const val STORAGE_FILENAME: String = "links"
         const val SQLITEDATABASE_NAME: String = "RssCash"
+
+        fun getTableName(url: String): String{
+            if (url == "")
+                return "default"
+            return url.split(':')[1].split('/')[2].split('.')[0]
+        }
     }
 }
